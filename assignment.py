@@ -134,15 +134,28 @@ class solver_class():
             self.puzzle.append(new)
             new = []
 
+        #AC-3(csp)
+            #while queue is not empty:
+                #(Xi,Xj) <- REMOVE-FIRST(queue):
+                #if REVISE(csp, Xi, Xj):
+                    #if size of Di = 0:
+                        #return false
+                    #for Xk in Xi. NEIGHBORS - {Xj}:
+                        #add (Xk, Xi) to queue
+
+        #REVISE(csp, Xi, Xj):
+            #revised = false
+            #for x in Di:
+                #if no value in Dj allows (x, y) to satisfy the constraint between Xi and Xj:
+                    #delete x from Di
+                    #revised = true
+            #return revised
+
         for i in range(1, 10):
             for j in range(1, 10):
                 # select variable
                 if self.given_number[i - 1][j - 1] == 0:
-
-
-
                     for k in range(1, 10):
-
                         output = self.problem.checker(i, j, k)  # Try to input 'K' & This increases the number of attempts
                         if output == 1:  # if the value is correct, checker will output 1. Otherwise, output is 0.
                             self.puzzle[i-1][j-1]=k
