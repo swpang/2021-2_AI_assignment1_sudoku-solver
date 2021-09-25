@@ -138,12 +138,10 @@ class solver_class():
             for j in range(1, 10):
                 # select variable
                 if self.given_number[i - 1][j - 1] == 0:
-                    domain = range(1, 10)
-                    for i in
 
 
 
-                for k in range(1, 10):
+                    for k in range(1, 10):
 
                         output = self.problem.checker(i, j, k)  # Try to input 'K' & This increases the number of attempts
                         if output == 1:  # if the value is correct, checker will output 1. Otherwise, output is 0.
