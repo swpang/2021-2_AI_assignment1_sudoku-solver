@@ -151,16 +151,62 @@ class solver_class():
                     #revised = true
             #return revised
 
+        #domain_set에서 순서는 : (1,1)=0, (1,2)=1, (1,3)=2, ..... (9,9)=80
+        '''
+        domains, domain_sizes = self.calc_domains(self.given_number)
+
+        for values in domain_sizes:
+            i = values[1]
+            j = values[2]
+            for k in domains[values[3]]:
+                if k != 0:
+                    output = self.problem.checker(i, j, k)  # Try to input 'K' & This increases the number of attempts
+                    if output == 1:  # if the value is correct, checker will output 1. Otherwise, output is 0.
+                        self.puzzle[i-1][j-1] = k
+                        break
+        '''
+
+        for items in range(81):
+            domains, domain_sizes = self.calc_domains(self.puzzle)
+            i = domain_sizes[0][1]
+            j = domain_sizes[0][2]
+            for k in domains[domain_sizes[0][3]]:
+                if k != 0:
+                    output = self.problem.checker(i, j, k)  # Try to input 'K' & This increases the number of attempts
+                    if output == 1:  # if the value is correct, checker will output 1. Otherwise, output is 0.
+                        self.puzzle[i - 1][j - 1] = k
+                        break
+
+
+    def calc_domains(self, given_number):
+    # i is row, j is column index
+        domain_set = []
+        domain_sizes = []
+        count = 0
         for i in range(1, 10):
             for j in range(1, 10):
                 # select variable
-                if self.given_number[i - 1][j - 1] == 0:
-                    for k in range(1, 10):
-                        output = self.problem.checker(i, j, k)  # Try to input 'K' & This increases the number of attempts
-                        if output == 1:  # if the value is correct, checker will output 1. Otherwise, output is 0.
-                            self.puzzle[i-1][j-1]=k
-                            break
-
+                if given_number[i - 1][j - 1] == 0:
+                    domain = list(range(1, 10))
+                    row_box = (int)((i - 1) // 3 + 1)
+                    column_box = (int)((j - 1) // 3 + 1)
+                    for item in range(1, 10):
+                        if given_number[i - 1][item - 1] in domain:
+                            domain.remove(int(given_number[i - 1][item - 1]))
+                        if given_number[item - 1][j - 1] in domain:
+                            domain.remove(int(given_number[item - 1][j - 1]))
+                    for x in range((row_box - 1) * 3 + 1, row_box * 3):
+                        for y in range((column_box - 1) * 3 + 1, column_box * 3):
+                            if given_number[x - 1][y - 1] in domain:
+                                domain.remove(int(given_number[x - 1][y - 1]))
+                    domain_set.append(domain)
+                    domain_sizes.append([len(domain), i, j, count])
+                else:
+                    domain_set.append([0])
+                    domain_sizes.append([10, i, j, count])
+                count += 1
+        domain_sizes.sort(key = lambda x: x[0])
+        return domain_set, domain_sizes
 
 if __name__ == "__main__":
     root = Tk()
